@@ -2,6 +2,7 @@
 Aplication Latest Earthquake Detaction
 MODULARISATION WITH FUNCTION
 MODULARISATION WITH PACKAGE
+
 """
 # from earthquake_detection import ekstraksi_data, tampilkan_data
 import earthquake_detection
