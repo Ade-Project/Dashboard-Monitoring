@@ -1,2 +1,2 @@
-# Indonesia-latest-earthquake-detection
-Indonesia latest earthquake detection
+# Dashboard Monitoring
+1. Indonesia latest earthquake detection
