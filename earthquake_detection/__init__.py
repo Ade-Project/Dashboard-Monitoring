@@ -36,7 +36,6 @@ def ekstraksi_data():
         dirasakan = None
 
         for res in result:
-            print(i, res)
             if i == 0:
                 date = res.text.split(", ")
                 tanggal = date[0]
@@ -53,6 +52,7 @@ def ekstraksi_data():
                 pusat_gempa = res.text
             elif i == 5:
                 dirasakan = res.text
+            i += 1
 
         hasil = dict()
         hasil["tanggal"] = tanggal
