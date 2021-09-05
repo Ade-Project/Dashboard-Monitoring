@@ -54,8 +54,6 @@ def ekstraksi_data():
             elif i == 5:
                 dirasakan = res.text
 
-            i += 1
-
         hasil = dict()
         hasil["tanggal"] = tanggal
         hasil["waktu"] = waktu
@@ -65,7 +63,6 @@ def ekstraksi_data():
         hasil["pusat_gempa"] = pusat_gempa
         hasil["dirasakan"] = dirasakan
 
-        # print(hasil)
         return hasil
 
     else:
