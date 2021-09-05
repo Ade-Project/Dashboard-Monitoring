@@ -11,4 +11,3 @@ if __name__ == "__main__":
     print("Aplikasi utama")
     result = earthquake_detection.ekstraksi_data()
     earthquake_detection.tampilkan_data(result)
-

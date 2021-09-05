@@ -1,3 +1,7 @@
+import requests
+from bs4 import BeautifulSoup
+
+
 def ekstraksi_data():
     """
     Tanggal: 02 September 2021
@@ -9,27 +13,79 @@ def ekstraksi_data():
     Dirasakan (Skala MMI): II Kendari
     :return:
     """
-    hasil = dict()
-    hasil["tanggal"] = "02 September 2021"
-    hasil["waktu"] = "07:22:36 WIB"
-    hasil["magnitudo"] = 2.7
-    hasil["kedalaman"] = "13 km"
-    hasil["lokasi"] = {"ls": 4.01, "bt": 122.49}
-    hasil["pusat_gempa"] = "Pusat gempa berada di darat 2.8 Km BaratLaut Baruga"
-    hasil["dirasakan"] = "II Kendari"
 
+    try:
+        content = requests.get("https://bmkg.go.id")
+    except Exception:
+        return None
 
-    # print(hasil)
-    return hasil
+    if content.status_code == 200:
+        soup = BeautifulSoup(content.text, "html.parser")
+
+        result = soup.find("div", {"class": "col-md-6 col-xs-6 gempabumi-detail no-padding"})
+        result = result.findChildren("li")
+
+        i = 0
+        tanggal = None
+        waktu = None
+        magnitudo = None
+        kedalaman = None
+        ls = None
+        bt = None
+        pusat_gempa = None
+        dirasakan = None
+
+        for res in result:
+            print(i, res)
+            if i == 0:
+                date = res.text.split(", ")
+                tanggal = date[0]
+                waktu = date[1]
+            if i == 1:
+                magnitudo = res.text
+            elif i == 2:
+                kedalaman = res.text
+            elif i == 3:
+                koordinat = res.text.split(" - ")
+                ls = koordinat[0]
+                bt = koordinat[1]
+            elif i == 4:
+                pusat_gempa = res.text
+            elif i == 5:
+                dirasakan = res.text
+
+            i += 1
+
+        hasil = dict()
+        hasil["tanggal"] = tanggal
+        hasil["waktu"] = waktu
+        hasil["magnitudo"] = magnitudo
+        hasil["kedalaman"] = kedalaman
+        hasil["lokasi"] = {"ls": ls, "bt": bt}
+        hasil["pusat_gempa"] = pusat_gempa
+        hasil["dirasakan"] = dirasakan
+
+        # print(hasil)
+        return hasil
+
+    else:
+        return None
 
 
 def tampilkan_data(result):
+    if result is None:
+        print("Tidak dapat menampilkan data gempa terkini")
+        return
+
     print("Gempa Terakhir Berdasarkan BMKG")
     print(f"Tanggal : {result['tanggal']}")
     print(f"Waktu : {result['waktu']}")
     print(f"Magnitudo : {result['magnitudo']}")
     print(f"Kedalaman : {result['kedalaman']}")
-    print(f"Lokasi : LS= {result['lokasi']['ls']}, BT= {result['lokasi']['bt']}")
+    print(f"Lokasi : {result['lokasi']['ls']}, {result['lokasi']['bt']}")
     print(f"Pusat Gempa : {result['pusat_gempa']}")
     print(f"Dirasakan : {result['dirasakan']}")
 
+
+if __name__ == "__main__":
+    print("Ini di __init__.py paket")
